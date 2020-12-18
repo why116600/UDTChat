@@ -36,10 +36,22 @@ namespace UDTChat
             }));
         }
 
+        public void OnDisconnect()
+        {
+            this.BeginInvoke(new Action(() =>
+            {
+                m_server = null;
+                m_client = null;
+                MessageBox.Show("已断线");
+                SwitchState(false);
+            }));
+
+        }
+
         private void ButtonConnect_Click(object sender, EventArgs e)
         {
             int port = Int32.Parse(textBoxPort.Text);
-            m_client = ChatClient.Connect(textAddress.Text, port, this);
+            m_client = ChatClient.Connect(textAddress.Text, port, this,MessageBox.Show("是否为穿越模式","UDTChat",MessageBoxButtons.YesNo)==DialogResult.Yes);
             if(m_client==null)
             {
                 MessageBox.Show("连接失败！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
